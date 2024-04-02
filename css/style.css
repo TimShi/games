@@ -14,14 +14,6 @@
   max-height: 100%;
 }
 
-#bunny {
-  display: none;
-}
-
-#doggy {
-  display: none;
-}
-
-#kitty {
+.asset {
   display: none;
 }

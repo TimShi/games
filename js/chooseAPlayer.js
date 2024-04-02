@@ -4,21 +4,26 @@ export class ChooseAPlayer {
   character_height = 250
   constructor(game) {
     this.game = game
-    this.bunny = new player("bunny", document.getElementById('bunny'), 50, 100, this.character_width, this.character_height)
-    this.doggy = new player("doggy", document.getElementById('doggy'), 350, 140, this.character_width, this.character_height)
-    this.kitty = new player("kitty", document.getElementById('kitty'), 750, 100, this.character_width, this.character_height)
 
+    this.players = []
+    this.players.push(
+      new player("bunny", document.getElementById('bunny'), 50, 100, this.character_width, this.character_height),
+      new player("doggy", document.getElementById('doggy'), 350, 140, this.character_width, this.character_height),
+      new player("kitty", document.getElementById('kitty'), 750, 100, this.character_width, this.character_height),
+      new player("elephant", document.getElementById('elephant'), 140, 430, this.character_width, this.character_height),
+      new player("zebra", document.getElementById('zebra'), 580, 430, this.character_width, this.character_height)
+  )
   }
   update() {
-    this.bunny.update()
-    this.doggy.update()
-    this.kitty.update()
+    this.players.forEach((p, i) => {
+      p.update()
+    })
   }
 
   draw(context) {
-    this.bunny.draw(context)
-    this.doggy.draw(context)
-    this.kitty.draw(context)
+    this.players.forEach((p, i) => {
+      p.draw(context)
+    })
   }
 }
 
