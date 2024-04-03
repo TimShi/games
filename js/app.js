@@ -9,11 +9,11 @@ window.addEventListener('load', function (){
   canvas.height =700;
 
   class Game {
-    constructor(width, height) {
-      this.width = width;
-      this.height = height;
+    constructor(canvas) {
+      this.canvas = canvas
+      this.width = this.canvas.width;
+      this.height = this.canvas.height;
       this.ChooseAPlayer = new ChooseAPlayer(this)
-      this.input = new InputHandler();
     }
 
     update() {
@@ -25,7 +25,7 @@ window.addEventListener('load', function (){
     }
   }
 
-  const game = new Game(canvas.width, canvas.height)
+  const game = new Game(canvas)
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)

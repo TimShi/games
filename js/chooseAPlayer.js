@@ -1,17 +1,25 @@
+import {InputHandler} from "./input.js";
 export class ChooseAPlayer {
 
   character_width = 250
   character_height = 250
+
+  bunny = "bunny"
+  doggy = "doggy"
+  kitty = "kitty"
+  elephant = "elephant"
+  zebra = "zebra"
+
   constructor(game) {
     this.game = game
 
     this.players = []
     this.players.push(
-      new player("bunny", document.getElementById('bunny'), 50, 100, this.character_width, this.character_height),
-      new player("doggy", document.getElementById('doggy'), 350, 140, this.character_width, this.character_height),
-      new player("kitty", document.getElementById('kitty'), 750, 100, this.character_width, this.character_height),
-      new player("elephant", document.getElementById('elephant'), 140, 430, this.character_width, this.character_height),
-      new player("zebra", document.getElementById('zebra'), 580, 430, this.character_width, this.character_height)
+      new player(this, this.bunny, 50, 100),
+      new player(this, this.doggy, 350, 140),
+      new player(this, this.kitty, 750, 100),
+      new player(this, this.elephant, 140, 430),
+      new player(this, this.zebra, 580, 430)
   )
   }
   update() {
@@ -29,20 +37,25 @@ export class ChooseAPlayer {
 
 class player {
 
-  constructor(character, image, x, y, width, height) {
+  constructor(parent, character, x, y) {
+    this.parent = parent
     this.character = character
-    this.image = image
-    this.width = width;
-    this.height = height;
+    this.image = document.getElementById(character)
     this.x = x;
     this.y = y;
-    this.image = image;
 
     this.v0 = 20;
     this.g = -3;
     this.tick = 0.3
     this.d = 0;
     this.time = Math.random() * -1
+
+    this.input = new InputHandler(this.parent.game.canvas, pos => {
+      if (pos.x > this.x && pos.x < this.x + this.image.width
+      && pos.y > this.y - this.d && pos.y < this.y - this.d + this.image.height) {
+        this.onMouseDownInside()
+      }
+    })
   }
 
   update() {
@@ -60,5 +73,9 @@ class player {
 
   draw(context) {
     context.drawImage(this.image, this.x, this.y - this.d)
+  }
+
+  onMouseDownInside() {
+    console.log("mouse touched down in " + this.character)
   }
 }
