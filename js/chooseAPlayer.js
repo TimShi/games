@@ -1,4 +1,5 @@
 import {InputHandler} from "./input.js";
+import {WakeUp} from "./wakeUp.js";
 export class ChooseAPlayer {
 
   character_width = 250
@@ -19,8 +20,9 @@ export class ChooseAPlayer {
       new player(this, this.doggy, 350, 140),
       new player(this, this.kitty, 750, 100),
       new player(this, this.elephant, 140, 430),
-      new player(this, this.zebra, 580, 430)
-  )
+      new player(this, this.zebra, 580, 430))
+
+    this.isVisible = false
   }
   update() {
     this.players.forEach((p, i) => {
@@ -32,6 +34,10 @@ export class ChooseAPlayer {
     this.players.forEach((p, i) => {
       p.draw(context)
     })
+  }
+
+  setIsVisible(isVisible) {
+    this.isVisible = isVisible
   }
 }
 
@@ -76,6 +82,8 @@ class player {
   }
 
   onMouseDownInside() {
-    console.log("mouse touched down in " + this.character)
+    if (this.parent.isVisible) {
+      this.parent.game.push(new WakeUp(this.parent.game))
+    }
   }
 }

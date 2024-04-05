@@ -13,19 +13,40 @@ window.addEventListener('load', function (){
       this.canvas = canvas
       this.width = this.canvas.width;
       this.height = this.canvas.height;
-      this.ChooseAPlayer = new ChooseAPlayer(this)
+      this.views = []
     }
 
     update() {
-      this.ChooseAPlayer.update()
+      if (this.views.length > 0) {
+        this.views[this.views.length - 1].update()
+      }
     }
 
     draw(context) {
-      this.ChooseAPlayer.draw(context)
+      if (this.views.length > 0) {
+        this.views[this.views.length - 1].draw(context)
+      }
+    }
+
+    push(view) {
+      if (this.views.length > 0) {
+        this.views[this.views.length - 1].setIsVisible(false)
+      }
+      view.setIsVisible(true)
+      this.views.push(view)
+    }
+
+    pop(view) {
+      if (this.views.length > 1) {
+        this.views.pop().setIsVisible(false)
+        this.views[this.views.length - 1].setIsVisible(true)
+      }
     }
   }
 
   const game = new Game(canvas)
+  const chooseAPlayer = new ChooseAPlayer(game)
+  game.push(chooseAPlayer)
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
