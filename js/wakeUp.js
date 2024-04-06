@@ -1,26 +1,55 @@
 import {InputHandler} from "./input.js";
 import {Button} from "./button.js";
+import {Gravity} from "./gravity.js";
 
 export class WakeUp {
 
-  constructor(game) {
+  constructor(game, character) {
     this.game = game
+    this.character = character
 
     this.isVisible = false
     this.image = document.getElementById("the-sleeping-area")
 
-    this.input = new InputHandler(this.game.canvas, pos => {
-      console.log(pos)
-    })
+    this.hearts = []
+    this.hearts.push(new Heart(this, "left_heart", 720, 280),
+      new Heart(this, "middle_heart", 840, 230),
+      new Heart(this, "right_heart", 891, 321))
   }
   update() {
+    this.hearts.forEach((h, i) => {
+      h.update()
+    })
   }
 
   draw(context) {
     context.drawImage(this.image, 0, 0)
+    this.hearts.forEach((h, i) => {
+      h.draw(context)
+    })
   }
 
   setIsVisible(isVisible) {
     this.isVisible = isVisible
+  }
+}
+
+class Heart {
+  constructor(parent, id, x, y) {
+    this.parent = parent
+    this.id = id
+    this.image = document.getElementById(id)
+    this.x = x;
+    this.y = y;
+
+    this.gravity = new Gravity(0, 20, 0.1)
+  }
+
+  update() {
+    this.gravity.updateDisplacement()
+  }
+
+  draw(context) {
+    context.drawImage(this.image, this.x, this.y - this.gravity.d)
   }
 }

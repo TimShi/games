@@ -1,5 +1,7 @@
 import {InputHandler} from "./input.js";
 import {WakeUp} from "./wakeUp.js";
+import {Gravity} from "./gravity.js";
+
 export class ChooseAPlayer {
 
   character_width = 250
@@ -50,11 +52,7 @@ class player {
     this.x = x;
     this.y = y;
 
-    this.v0 = 20;
-    this.g = -3;
-    this.tick = 0.3
-    this.d = 0;
-    this.time = Math.random() * -1
+    this.gravity = new Gravity(Math.random() * -1, 20, 0.3)
 
     this.input = new InputHandler(this.parent.game.canvas, pos => {
       if (!this.parent.isVisible) {
@@ -62,30 +60,21 @@ class player {
       }
 
       if (pos.x > this.x && pos.x < this.x + this.image.width
-      && pos.y > this.y - this.d && pos.y < this.y - this.d + this.image.height) {
+      && pos.y > this.y - this.gravity.d && pos.y < this.y - this.gravity.d + this.image.height) {
         this.onMouseDownInside()
       }
     })
   }
 
   update() {
-    if (this.time < 0) {
-      this.time = this.time + this.tick/3
-      return
-    }
-
-    if (this.d <= 0) {
-      this.time = this.tick
-    }
-    this.d = this.v0 * this.time + this.g /2 * this.time ** 2
-    this.time = this.time + this.tick
+    this.gravity.updateDisplacement()
   }
 
   draw(context) {
-    context.drawImage(this.image, this.x, this.y - this.d)
+    context.drawImage(this.image, this.x, this.y - this.gravity.d)
   }
 
   onMouseDownInside() {
-    this.parent.game.push(new WakeUp(this.parent.game))
+    this.parent.game.push(new WakeUp(this.parent.game, this.character))
   }
 }

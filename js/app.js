@@ -14,6 +14,10 @@ window.addEventListener('load', function (){
       this.width = this.canvas.width;
       this.height = this.canvas.height;
       this.views = []
+
+      this.inputDebugger = new InputHandler(this.canvas, pos => {
+        console.log(pos)
+      })
     }
 
     update() {
