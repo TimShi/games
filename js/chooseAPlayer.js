@@ -57,6 +57,10 @@ class player {
     this.time = Math.random() * -1
 
     this.input = new InputHandler(this.parent.game.canvas, pos => {
+      if (!this.parent.isVisible) {
+        return
+      }
+
       if (pos.x > this.x && pos.x < this.x + this.image.width
       && pos.y > this.y - this.d && pos.y < this.y - this.d + this.image.height) {
         this.onMouseDownInside()
@@ -82,8 +86,6 @@ class player {
   }
 
   onMouseDownInside() {
-    if (this.parent.isVisible) {
-      this.parent.game.push(new WakeUp(this.parent.game))
-    }
+    this.parent.game.push(new WakeUp(this.parent.game))
   }
 }
