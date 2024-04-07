@@ -5,6 +5,10 @@ export class InputHandler {
       let position = getMousePos(canvas, ev)
       callback(position)
     })
+    canvas.addEventListener("touchend", ev=>{
+      let position = getMousePos(canvas, ev)
+      callback(position)
+    })
   }
 }
 
