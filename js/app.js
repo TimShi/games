@@ -40,7 +40,7 @@ window.addEventListener('load', function (){
       this.views.push(view)
     }
 
-    pop(view) {
+    pop() {
       if (this.views.length > 1) {
         this.views.pop().setIsVisible(false)
         this.views[this.views.length - 1].setIsVisible(true)

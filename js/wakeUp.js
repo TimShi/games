@@ -6,10 +6,13 @@ export class WakeUp {
 
   constructor(game, character) {
     this.game = game
-    this.character = character
 
     this.isVisible = false
     this.image = document.getElementById("the-sleeping-area")
+    this.characterImg = document.getElementById("sleep-" + character)
+    this.backButton = new Button(this, 30, 30, 150, 140, document.getElementById("btn_back"), ev => {
+      this.goBack()
+    })
 
     this.hearts = []
     this.hearts.push(new Heart(this, "left_heart", 720, 280),
@@ -27,10 +30,17 @@ export class WakeUp {
     this.hearts.forEach((h, i) => {
       h.draw(context)
     })
+
+    context.drawImage(this.characterImg, 574, 398, 321,158)
+    this.backButton.draw(context)
   }
 
   setIsVisible(isVisible) {
     this.isVisible = isVisible
+  }
+
+  goBack() {
+    this.game.pop()
   }
 }
 

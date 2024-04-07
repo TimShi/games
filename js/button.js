@@ -1,13 +1,14 @@
 import {InputHandler} from "./input.js";
 
 export class Button {
-  constructor(parent, x, y, w, h, callback) {
+  constructor(parent, x, y, w, h, image, callback) {
     this.parent = parent
     this.x = x
     this.y = y
     this.w = w
     this.h = h
     this.callback = callback
+    this.image = image
 
     this.input = new InputHandler(this.parent.game.canvas, pos => {
       if (!this.parent.isVisible) {
@@ -27,9 +28,13 @@ export class Button {
 
   draw(context) {
     // this is for debugging, we actually just want an invisible button here
-    context.beginPath();
-    context.rect(this.x, this.y, this.w, this.h);
-    context.stroke();
+    if (this.image) {
+      context.drawImage(this.image, this.x, this.y, this.w, this.h)
+    } else {
+      context.beginPath();
+      context.rect(this.x, this.y, this.w, this.h);
+      context.stroke();
+    }
   }
 
   onMouseDownInside(pos, callback) {
