@@ -1,6 +1,7 @@
 import {InputHandler} from "./input.js";
 import {WakeUp} from "./wakeUp.js";
 import {Gravity} from "./gravity.js";
+import {Path} from "./gravity.js";
 
 export class ChooseAPlayer {
 
@@ -22,7 +23,8 @@ export class ChooseAPlayer {
       new player(this, this.doggy, 350, 140),
       new player(this, this.kitty, 750, 100),
       new player(this, this.elephant, 140, 430),
-      new player(this, this.zebra, 580, 430))
+      new player(this, this.zebra, 580, 430)
+    )
 
     this.isVisible = false
   }
@@ -52,7 +54,8 @@ class player {
     this.x = x;
     this.y = y;
 
-    this.gravity = new Gravity(Math.random() * -1, 20, 0.3)
+    this.gravity = new Gravity(0.3)
+    this.gravity.addPath(new Path(this.x, this.y, this.x, this.y, this.y - 100,true))
 
     this.input = new InputHandler(this.parent.game.canvas, pos => {
       if (!this.parent.isVisible) {
@@ -60,18 +63,20 @@ class player {
       }
 
       if (pos.x > this.x && pos.x < this.x + this.image.width
-      && pos.y > this.y - this.gravity.d && pos.y < this.y - this.gravity.d + this.image.height) {
+      && pos.y > this.y && pos.y < this.y + this.image.height) {
         this.onMouseDownInside()
       }
     })
   }
 
   update() {
-    this.gravity.updateDisplacement()
+    let d = this.gravity.updateDisplacement()
+    this.x = d.x
+    this.y = d.y
   }
 
   draw(context) {
-    context.drawImage(this.image, this.x, this.y - this.gravity.d)
+    context.drawImage(this.image, this.x, this.y)
   }
 
   onMouseDownInside() {

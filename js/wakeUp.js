@@ -1,6 +1,6 @@
 import {InputHandler} from "./input.js";
 import {Button} from "./button.js";
-import {Gravity} from "./gravity.js";
+import {Gravity, Path} from "./gravity.js";
 
 export class WakeUp {
 
@@ -12,6 +12,12 @@ export class WakeUp {
     this.characterImg = document.getElementById("sleep-" + character)
     this.backButton = new Button(this, 30, 30, 150, 140, document.getElementById("btn_back"), ev => {
       this.goBack()
+    })
+    this.stayInBedButton = new Button(this, 190, 217, 288, 52, null, ev => {
+      console.log("clicked on stay in bed button")
+    })
+    this.getUpButton = new Button(this, 194, 334, 241, 70, null, ev => {
+      console.log("clicked on get up button")
     })
 
     this.hearts = []
@@ -52,14 +58,17 @@ class Heart {
     this.x = x;
     this.y = y;
 
-    this.gravity = new Gravity(0, 20, 0.1)
+    this.gravity = new Gravity(0.1)
+    this.gravity.addPath(new Path(this.x, this.y, this.x, this.y, this.y - 70, true))
   }
 
   update() {
-    this.gravity.updateDisplacement()
+    let d = this.gravity.updateDisplacement()
+    this.x = d.x
+    this.y = d.y
   }
 
   draw(context) {
-    context.drawImage(this.image, this.x, this.y - this.gravity.d)
+    context.drawImage(this.image, this.x, this.y)
   }
 }
