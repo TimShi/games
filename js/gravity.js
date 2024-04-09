@@ -13,6 +13,10 @@ export class Gravity {
     let d = new Object()
     let p = this.paths[0]
 
+    if (p.skip && p.skip()) {
+      return null
+    }
+
     d.x = p.x0 + p.v0x * p.currentTime
     d.y = p.y0 + p.v0y * p.currentTime + this.g /2 * (p.currentTime) ** 2
 
@@ -49,8 +53,20 @@ export class Gravity {
   }
 }
 
+export function withDone(done) {
+  return function(p) {
+    p.done = done
+  }
+}
+
+export function withSkipCondition(skip) {
+  return function(p) {
+    p.skip = skip
+  }
+}
+
 export class Path {
-  constructor(src, target, dy, shouldRepeat, done) {
+  constructor(src, target, dy, shouldRepeat, ...opts) {
     this.x0 = src.x
     this.y0 = src.y
     this.x1 = target.x
@@ -64,6 +80,13 @@ export class Path {
 
     this.currentTime = 1 // running time of this event
 
-    this.done = done //callback when done
+    //options
+    this.done = null //callback when done
+    this.skip = null
+
+    for (let i=0; i<opts.length; i++) {
+      let f = opts[0]
+      f(this)
+    }
   }
 }

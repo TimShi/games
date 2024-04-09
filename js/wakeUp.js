@@ -1,6 +1,6 @@
 import {InputHandler} from "./input.js";
 import {Button} from "./button.js";
-import {Gravity, Path} from "./gravity.js";
+import {Gravity, Path, withDone, withSkipCondition} from "./gravity.js";
 
 //state of this screen
 const state_wake_zero_heart = 0
@@ -13,6 +13,8 @@ const heart_loc_back_button= {x:194, y:50}
 const heart_loc_left = {x:720, y:280}
 const heart_loc_middle = {x:840, y:230}
 const heart_loc_right = {x:891, y:321}
+
+const snoozeRep = 5
 export class WakeUp {
 
   constructor(game, character) {
@@ -90,17 +92,13 @@ export class WakeUp {
     let src_bounce_height = 70
     let target_bounce_height = 50
     let jump_height = 700
-    let initial_bounce
     if (id == "left_heart") {
-      initial_bounce = 3
       src_loc = heart_loc_left
       target_loc = heart_loc_get_up_button
     } else if (id == "middle_heart") {
-      initial_bounce = 4
       src_loc = heart_loc_middle
       target_loc = heart_loc_snooze_button
     } else if (id == "right_heart") {
-      initial_bounce = 5
       src_loc = heart_loc_right
       target_loc = heart_loc_back_button
     } else {
@@ -108,12 +106,12 @@ export class WakeUp {
     }
 
     let h = new Heart(this, id, src_loc.x, src_loc.y)
-    for (let i = 0; i < initial_bounce; i++) {
+    for (let i = 0; i < snoozeRep; i++) {
       h.addMovement(new Path(src_loc, src_loc,src_loc.y - src_bounce_height, false)) //jump on top of character
     }
-    h.addMovement(new Path(src_loc, target_loc, src_loc.y- jump_height, false, ()=>{
+    h.addMovement(new Path(src_loc, target_loc, src_loc.y- jump_height, false, withDone(()=>{
       this.wakedHeart()
-    })) //jump to snooze button
+    }))) //jump to snooze button
     h.addMovement(new Path(target_loc, target_loc, target_loc.y - target_bounce_height, true)) //jump beside the button
 
     return h
@@ -140,16 +138,23 @@ export class WakeUp {
       return null
     }
 
-    h.addMovement(new Path(src_loc, target_loc, src_loc.y- jump_height, false, ()=>{
+    h.addMovement(new Path(src_loc, target_loc, src_loc.y- jump_height, false, withDone(()=>{
       this.snoozedHeart()
-    })) //jump back to character
-    for (let i = 0; i < 4; i++) {
+    }))) //jump back to character
+    //synchronize
+    h.addMovement(new Path(target_loc, target_loc, target_loc.y - target_bounce_height, false, withSkipCondition(
+      ()=>{
+        //return false
+        return this.state > state_wake_zero_heart
+      }
+    ))) //jump on character 3 times
+    for (let i = 0; i < snoozeRep; i++) {
       h.addMovement(new Path(target_loc, target_loc, target_loc.y - target_bounce_height, false)) //jump on character 3 times
     }
 
-    h.addMovement(new Path(target_loc, src_loc,target_loc.y - jump_height, false, () => {
+    h.addMovement(new Path(target_loc, src_loc,target_loc.y - jump_height, false, withDone(() => {
       this.wakedHeart()
-    })) //jump back to buttons
+    }))) //jump back to buttons
 
     h.addMovement(new Path(src_loc, src_loc,src_loc.y - src_bounce_height, true)) //jump on buttons
     return h
@@ -185,8 +190,9 @@ class Heart {
 
   clearMovement() {
     if (this.gravity.paths.length > 0) {
-      this.gravity.paths.slice(0, 1)
-      this.gravity.paths[0].shouldRepeat = false
+      this.gravity.paths = []
+      // this.gravity.paths.slice(0, 1)
+      // this.gravity.paths[0].shouldRepeat = false
     }
   }
 }
