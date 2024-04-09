@@ -55,7 +55,7 @@ class player {
     this.y = y;
 
     this.gravity = new Gravity(0.3)
-    this.gravity.addPath(new Path(this.x, this.y, this.x, this.y, this.y - 100,true))
+    this.gravity.addPath(new Path({x: this.x, y:this.y}, {x: this.x, y:this.y}, this.y - 100,true))
 
     this.input = new InputHandler(this.parent.game.canvas, pos => {
       if (!this.parent.isVisible) {
@@ -71,8 +71,11 @@ class player {
 
   update() {
     let d = this.gravity.updateDisplacement()
-    this.x = d.x
-    this.y = d.y
+
+    if (d != null) {
+      this.x = d.x
+      this.y = d.y
+    }
   }
 
   draw(context) {

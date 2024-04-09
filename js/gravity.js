@@ -7,7 +7,7 @@ export class Gravity {
   }
 
   updateDisplacement() {
-    if (this.paths.length < 0) {
+    if (this.paths.length <= 0) {
       return null
     }
     let d = new Object()
@@ -23,6 +23,9 @@ export class Gravity {
         p.currentTime = 0
       } else {
         this.paths.shift()
+        if (p.done) {
+          p.done()
+        }
       }
     }
 
@@ -47,11 +50,11 @@ export class Gravity {
 }
 
 export class Path {
-  constructor(x0, y0, x1, y1, dy, shouldRepeat) {
-    this.x0 = x0
-    this.y0 = y0
-    this.x1 = x1
-    this.y1 = y1
+  constructor(src, target, dy, shouldRepeat, done) {
+    this.x0 = src.x
+    this.y0 = src.y
+    this.x1 = target.x
+    this.y1 = target.y
     this.dy = dy
     this.shouldRepeat = shouldRepeat
 
@@ -60,5 +63,7 @@ export class Path {
     this.dt = 0
 
     this.currentTime = 1 // running time of this event
+
+    this.done = done //callback when done
   }
 }
