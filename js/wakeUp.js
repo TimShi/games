@@ -1,6 +1,7 @@
 import {InputHandler} from "./input.js";
 import {Button} from "./button.js";
 import {Gravity, Path, withDone, withSkipCondition} from "./gravity.js";
+import {DressUp} from "./dressUp.js";
 
 //state of this screen
 const state_wake_zero_heart = 0
@@ -19,6 +20,7 @@ export class WakeUp {
 
   constructor(game, character) {
     this.game = game
+    this.character = character
 
     this.isVisible = false
     this.image = document.getElementById("the-sleeping-area")
@@ -26,10 +28,10 @@ export class WakeUp {
     this.backButton = new Button(this, 30, 30, 150, 140, document.getElementById("btn_back"), ev => {
       this.goBack()
     })
-    this.stayInBedButton = new Button(this, 190, 217, 288, 52, null, ev => {
+    this.stayInBedButton = new Button(this, 180, 210, 288, 70, null, ev => {
       this.snooze()
     })
-    this.getUpButton = new Button(this, 194, 334, 241, 70, null, ev => {
+    this.getUpButton = new Button(this, 190, 340, 250, 80, null, ev => {
       this.getUp()
     })
 
@@ -71,7 +73,7 @@ export class WakeUp {
   snoozedHeart() {
     if (this.state > state_wake_zero_heart) {
       this.state--
-    }
+    } //TODO: do something to acknowledge button press
   }
 
   snooze() {
@@ -83,7 +85,7 @@ export class WakeUp {
   }
 
   getUp() {
-
+    this.game.push(new DressUp(this.game, this.character))
   }
 
   makeHeart(id) {
