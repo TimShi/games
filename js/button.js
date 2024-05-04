@@ -1,14 +1,14 @@
 import {InputHandler} from "./input.js";
 
 export class Button {
-  constructor(parent, x, y, w, h, image, callback) {
+  constructor(parent, x, y, w, h, image, mouseDownCallback, mouseDragCallback) {
     this.parent = parent
     this.x = x
     this.y = y
     this.w = w
     this.h = h
-    this.callback = callback
     this.image = image
+    this.isMouseDown = false
 
     this.input = new InputHandler(this.parent.game.canvas, pos => {
       if (!this.parent.isVisible) {
@@ -17,8 +17,21 @@ export class Button {
 
       if (pos.x > this.x && pos.x < this.x + this.w
         && pos.y > this.y && pos.y < this.y + this.h) {
-        this.onMouseDownInside(pos, callback)
+        this.isMouseDown = true
+        this.onMouseDownInside(pos, mouseDownCallback)
       }
+    }, (pos, movementX, movementY) => {
+      if (!this.parent.isVisible) {
+        return
+      }
+      if (this.isMouseDown) {
+        this.onMouseDrag(pos, movementX, movementY, mouseDragCallback)
+      }
+    }, pos => {
+      if (!this.parent.isVisible) {
+        return
+      }
+      this.isMouseDown = false
     })
   }
 
@@ -39,5 +52,10 @@ export class Button {
 
   onMouseDownInside(pos, callback) {
     callback(pos)
+  }
+
+  onMouseDrag(pos, movementX, movementY, callback) {
+    console.log("mouse is dragging")
+    callback(pos, movementX, movementY)
   }
 }

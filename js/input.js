@@ -1,14 +1,30 @@
 export class InputHandler {
-  constructor(canvas, callback) {
+  constructor(canvas, mouseDownCallback, mouseMoveCallback, mouseUpCallback) {
     this.events = [];
-    canvas.addEventListener("mousedown", ev => {
-      let position = getMousePos(canvas, ev)
-      callback(position)
-    })
-    canvas.addEventListener("touchend", ev=>{
-      let position = getTouchPos(canvas, ev)
-      callback(position)
-    })
+
+    if (mouseDownCallback) {
+      canvas.addEventListener("mousedown", ev => {
+        let position = getMousePos(canvas, ev)
+        mouseDownCallback(position)
+      })
+      canvas.addEventListener("touchend", ev=>{
+        let position = getTouchPos(canvas, ev)
+        mouseDownCallback(position)
+      })
+    }
+    if (mouseMoveCallback) {
+      canvas.addEventListener("mousemove", ev=>{
+        console.log(ev.movementX, ev.movementY)
+        let position = getMousePos(canvas, ev)
+        mouseMoveCallback(position, ev.movementX, ev.movementY)
+      })
+    }
+    if (mouseUpCallback) {
+      canvas.addEventListener("mouseup", ev=>{
+        let position = getMousePos(canvas, ev)
+        mouseUpCallback(position)
+      })
+    }
   }
 }
 
