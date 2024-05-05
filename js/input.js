@@ -14,7 +14,6 @@ export class InputHandler {
     }
     if (mouseMoveCallback) {
       canvas.addEventListener("mousemove", ev=>{
-        console.log(ev.movementX, ev.movementY)
         let position = getMousePos(canvas, ev)
         mouseMoveCallback(position, ev.movementX, ev.movementY)
       })
