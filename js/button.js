@@ -1,7 +1,7 @@
 import {InputHandler} from "./input.js";
 
 export class Button {
-  constructor(parent, x, y, w, h, image, mouseDownCallback, mouseDragCallback) {
+  constructor(parent, x, y, w, h, image, mouseDownCallback, mouseDragCallback, mouseDragEndCallback) {
     this.parent = parent
     this.x = x
     this.y = y
@@ -31,6 +31,17 @@ export class Button {
       if (!this.parent.isVisible) {
         return
       }
+      if (this.isMouseDown) {
+        this.onMouseDragEnd(pos, mouseDragEndCallback)
+      }
+      this.isMouseDown = false
+    }, pos => {
+      if (!this.parent.isVisible) {
+        return
+      }
+      if (this.isMouseDown) {
+        this.onMouseDragEnd(pos, mouseDragEndCallback)
+      }
       this.isMouseDown = false
     })
   }
@@ -57,5 +68,9 @@ export class Button {
   onMouseDrag(pos, movementX, movementY, callback) {
     console.log("mouse is dragging")
     callback(pos, movementX, movementY)
+  }
+
+  onMouseDragEnd(pos, callback) {
+    callback(pos)
   }
 }

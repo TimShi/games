@@ -10,10 +10,12 @@ export class DressUp extends BaseView{
         pos=>{},
       (pos, movementX, movementY) => {
       console.log(movementX, movementY)
-      console.log(this.pinkDressButton.x, this.pinkDressButton.y)        
+      console.log(this.pinkDressButton.x, this.pinkDressButton.y)
       this.pinkDressButton.x = this.pinkDressButton.x + movementX
       this.pinkDressButton.y = this.pinkDressButton.y + movementY
-    })
+    }, pos=>{
+      console.log("drop the dress at " + pos)
+      })
   }
   draw(context) {
     super.draw(context)

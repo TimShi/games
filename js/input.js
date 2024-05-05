@@ -1,5 +1,5 @@
 export class InputHandler {
-  constructor(canvas, mouseDownCallback, mouseMoveCallback, mouseUpCallback) {
+  constructor(canvas, mouseDownCallback, mouseMoveCallback, mouseUpCallback, mouseOutCallback) {
     this.events = [];
 
     if (mouseDownCallback) {
@@ -23,6 +23,12 @@ export class InputHandler {
       canvas.addEventListener("mouseup", ev=>{
         let position = getMousePos(canvas, ev)
         mouseUpCallback(position)
+      })
+    }
+    if (mouseOutCallback) {
+      canvas.addEventListener("mouseout", ev=>{
+        let position = getMousePos(canvas, ev)
+        mouseOutCallback(position)
       })
     }
   }
