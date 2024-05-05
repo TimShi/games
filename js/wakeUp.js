@@ -1,6 +1,6 @@
 import {InputHandler} from "./input.js";
 import {Button} from "./button.js";
-import {Gravity, Path, withDone, withSkipCondition} from "./gravity.js";
+import {Jump, Path, withDone, withSkipCondition} from "./physics/jump.js";
 import {DressUp} from "./dressUp.js";
 
 //state of this screen
@@ -171,11 +171,11 @@ class Heart {
     this.x = x;
     this.y = y;
 
-    this.gravity = new Gravity(0.2)
+    this.jump = new Jump(0.2)
   }
 
   update() {
-    let d = this.gravity.updateDisplacement()
+    let d = this.jump.updateDisplacement()
     if (d != null) {
       this.x = d.x
       this.y = d.y
@@ -187,12 +187,12 @@ class Heart {
   }
 
   addMovement(p) {
-    this.gravity.addPath(p)
+    this.jump.addPath(p)
   }
 
   clearMovement() {
-    if (this.gravity.paths.length > 0) {
-      this.gravity.paths = []
+    if (this.jump.paths.length > 0) {
+      this.jump.paths = []
       // this.gravity.paths.slice(0, 1)
       // this.gravity.paths[0].shouldRepeat = false
     }

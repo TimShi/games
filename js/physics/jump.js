@@ -1,4 +1,4 @@
-export class Gravity {
+export class Jump {
 
   constructor(tick) {
     this.g = 3; // a positive number because the y coordinate goes down (opposite of earth coordinate)

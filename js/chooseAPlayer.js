@@ -1,7 +1,7 @@
 import {InputHandler} from "./input.js";
 import {WakeUp} from "./wakeUp.js";
-import {Gravity} from "./gravity.js";
-import {Path} from "./gravity.js";
+import {Jump} from "./physics/jump.js";
+import {Path} from "./physics/jump.js";
 
 export class ChooseAPlayer {
 
@@ -54,8 +54,8 @@ class player {
     this.x = x;
     this.y = y;
 
-    this.gravity = new Gravity(0.3)
-    this.gravity.addPath(new Path({x: this.x, y:this.y}, {x: this.x, y:this.y}, this.y - 100,true))
+    this.jump = new Jump(0.3)
+    this.jump.addPath(new Path({x: this.x, y:this.y}, {x: this.x, y:this.y}, this.y - 100,true))
 
     this.input = new InputHandler(this.parent.game.canvas, pos => {
       if (!this.parent.isVisible) {
@@ -70,7 +70,7 @@ class player {
   }
 
   update() {
-    let d = this.gravity.updateDisplacement()
+    let d = this.jump.updateDisplacement()
 
     if (d != null) {
       this.x = d.x

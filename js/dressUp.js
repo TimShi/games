@@ -9,8 +9,6 @@ export class DressUp extends BaseView{
     this.pinkDressButton = new Button(this, 132, 368, 140, 151, document.getElementById("pink_dress"),
         pos=>{},
       (pos, movementX, movementY) => {
-      console.log(movementX, movementY)
-      console.log(this.pinkDressButton.x, this.pinkDressButton.y)
       this.pinkDressButton.x = this.pinkDressButton.x + movementX
       this.pinkDressButton.y = this.pinkDressButton.y + movementY
     }, pos=>{
