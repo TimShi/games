@@ -27,7 +27,9 @@ export class Clothing {
     this.game = game
     this.isVisible = true
     this.button = new Button(this, 132, 368, 140, 151, document.getElementById(name),
-      pos=>{},
+      pos=>{
+        this.stopFalling()
+      },
       (pos, movementX, movementY) => {
         this.button.x = this.button.x + movementX
         this.button.y = this.button.y + movementY
@@ -51,5 +53,9 @@ export class Clothing {
   fallToGround() {
     let fallPath = new FallPath(this.button.y, this.game.canvas.height - this.button.h)
     this.fall.fallFrom(fallPath)
+  }
+
+  stopFalling() {
+    this.fall.stopFall()
   }
 }

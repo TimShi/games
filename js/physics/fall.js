@@ -22,6 +22,9 @@ export class Fall {
   fallFrom(path) {
     this.falls.push(path)
   }
+  stopFall() {
+    this.falls.shift()
+  }
 }
 
 export class FallPath {
